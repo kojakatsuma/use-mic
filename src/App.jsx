@@ -2,8 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import p5 from 'p5';
 
 
-const ballCountInRow = 5
-
 /**
  *
  * @param {p5} p
