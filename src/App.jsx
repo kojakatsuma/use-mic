@@ -23,7 +23,7 @@ const sketch = (p) => {
             const colorValue = mic.getLevel()
             for (let y = -RADIUS * 4; y <= RADIUS * 4; y += RADIUS * 2) {
                 for (let z = -RADIUS * 4; z <= RADIUS * 4; z += RADIUS * 2) {
-                    const r = 1 +  mic.getLevel() * 0.008
+                    const r = 1 +  mic.getLevel() * 0.01
                     createBall(x * r, y * r, z * r, colorValue)
                 }
 
