@@ -1,12 +1,15 @@
 import React, { useRef, useEffect } from 'react';
 import p5 from 'p5';
+import Mic from './Mic';
 
+const RADIUS = 30;
 
 /**
  *
  * @param {p5} p
  */
 const sketch = (p) => {
+    const mic = new Mic()
     p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL)
         p.noStroke()
@@ -16,12 +19,12 @@ const sketch = (p) => {
     p.draw = () => {
         p.background(150)
         p.lights()
-        p.rotateY(p.frameCount * 0.01)
-        for (let x = -120; x <= 120; x += 60) {
-            for (let y = -120; y <= 120; y += 60) {
-                for (let z = -120; z <= 120; z += 60) {
-                    const colorValue = p.random(100)
-                    const r = 1 + p.random(0.1)
+        p.rotateY(-0.3)
+        for (let x = -RADIUS * 4; x <= RADIUS * 4; x += RADIUS*2) {
+            const colorValue = mic.getLevel()
+            for (let y = -RADIUS * 4; y <= RADIUS * 4; y += RADIUS*2) {
+                for (let z = -RADIUS * 4; z <= RADIUS * 4; z += RADIUS*2) {
+                    const r = 1 + mic.getLevel() * 0.005
                     createBall(x * r, y * r, z * r, colorValue)
                 }
 
@@ -32,7 +35,7 @@ const sketch = (p) => {
 
     const createBall = (x, y, z, color) => {
         p.push()
-        p.translate(x, y, z).fill(p.color(color, color, color)).sphere(30)
+        p.translate(x, y, z).fill(p.color(color, color, color)).sphere(RADIUS)
         p.pop()
     }
 
