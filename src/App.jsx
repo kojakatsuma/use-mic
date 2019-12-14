@@ -13,18 +13,17 @@ const sketch = (p) => {
     p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL)
         p.noStroke()
-        p.frameRate(24)
     }
 
     p.draw = () => {
         p.background(150)
         p.lights()
         p.rotateY(-0.3)
-        for (let x = -RADIUS * 4; x <= RADIUS * 4; x += RADIUS*2) {
+        for (let x = -RADIUS * 4; x <= RADIUS * 4; x += RADIUS * 2) {
             const colorValue = mic.getLevel()
-            for (let y = -RADIUS * 4; y <= RADIUS * 4; y += RADIUS*2) {
-                for (let z = -RADIUS * 4; z <= RADIUS * 4; z += RADIUS*2) {
-                    const r = 1 + mic.getLevel() * 0.005
+            for (let y = -RADIUS * 4; y <= RADIUS * 4; y += RADIUS * 2) {
+                for (let z = -RADIUS * 4; z <= RADIUS * 4; z += RADIUS * 2) {
+                    const r = 1 +  mic.getLevel() * 0.008
                     createBall(x * r, y * r, z * r, colorValue)
                 }
 

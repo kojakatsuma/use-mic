@@ -5,8 +5,7 @@ export default class Mic {
         navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
             this.context = new AudioContext();
             this.analayzer = this.context.createAnalyser()
-            this.analayzer.smoothingTimeConstant = 0.2;
-            this.analayzer.fftSize = 1024
+            // this.analayzer.fftSize = 1024
             this.processor = this.context.createScriptProcessor(1024 * 2, 1, 1)
             this.input = this.context.createMediaStreamSource(stream)
             this.input.connect(this.analayzer)
