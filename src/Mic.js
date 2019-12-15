@@ -2,7 +2,6 @@
 
 export default class Mic {
     constructor() {
-        // navigator.permissions.query()
         navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
             this.context = new AudioContext();
             this.analayzer = this.context.createAnalyser()
@@ -23,5 +22,9 @@ export default class Mic {
 
     getLevel() {
         return this.res
+    }
+
+    close() {
+        this.context.close()
     }
 }
