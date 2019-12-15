@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import p5 from 'p5';
-import Mic from './Mic';
 
 const RADIUS = 30;
 
@@ -8,7 +7,6 @@ const RADIUS = 30;
  * @param {p5} p
  */
 const sketch = (p) => {
-    const mic = new Mic()
     p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL)
         p.noStroke()
@@ -16,14 +14,13 @@ const sketch = (p) => {
 
     p.draw = () => {
         p.background(150)
-        p.lights()
-        p.rotateY(-0.3)
+        p.lights() 
+        p.rotateY(45)
         for (let x = -RADIUS * 4; x <= RADIUS * 4; x += RADIUS * 2) {
-            const colorValue = mic.getLevel()
+            const colorValue = 50
             for (let y = -RADIUS * 4; y <= RADIUS * 4; y += RADIUS * 2) {
                 for (let z = -RADIUS * 4; z <= RADIUS * 4; z += RADIUS * 2) {
-                    const r = 1 +  mic.getLevel() * 0.005
-                    createBall(x * r, y * r, z * r, colorValue)
+                    createBall(x, y, z, colorValue)
                 }
 
             }

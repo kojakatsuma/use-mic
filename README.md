@@ -58,66 +58,49 @@ https://kojakatsuma.github.io/use-mic/
 まず球体を表示している部分のコードです。`5 * 5 * 5 = 125個`の球体を四角形の配置で表示します。
 
 ```jsx
-import React, { useRef, useEffect } from 'react';
 import p5 from 'p5';
-import Mic from './Mic';
 
-const RADIUS = 30; //球体の半径を指定
+const RADIUS = 30; // 球体の半径
 
 /**
  * p5jsを使用してcanvasにアニメーションを描画する。
  * @param {p5} p
  */
 const sketch = (p) => {
-    const mic = new Mic()
     p.setup = () => {
-        p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL) //ブラウザの画面いっぱいにcanvasを展開する & WEBGL使う。
+        p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL) //windowいっぱいにcanvasを展開させる。& WEBGLを使用するよう指定。
         p.noStroke()
     }
 
     p.draw = () => {
-        p.background(150) // 背景の色を指定。
-        p.lights() // 球体に光を当てる
-        p.rotateY(-0.3)
+        p.background(150) // 背景の色を指定
+        p.lights()        // canvasにライトを当てる。
+        p.rotateY(45)     // canvasを45度回転させる。
         for (let x = -RADIUS * 4; x <= RADIUS * 4; x += RADIUS * 2) {
-            const colorValue = mic.getLevel()
+            const colorValue = 50 
             for (let y = -RADIUS * 4; y <= RADIUS * 4; y += RADIUS * 2) {
                 for (let z = -RADIUS * 4; z <= RADIUS * 4; z += RADIUS * 2) {
-                    const r = 1 +  mic.getLevel() * 0.005
-                    createBall(x * r, y * r, z * r, colorValue)
+                    createBall(x, y, z, colorValue)
                 }
 
             }
         }
 
     }
-
-    /**
-     * 球体を指定の座標に作成する。
-     *
-     * @param {number} x x座標
-     * @param {number} y y座標
-     * @param {number} z z座標
-     * @param {number} color 色
-     */
-    const createBall = (x, y, z, color) => {
-            p.push()
-            p.translate(x, y, z).fill(p.color(color)).sphere(RADIUS)
-            p.pop()
-        }
-
+/**
+ * 球体を指定の座標に作成する。
+ *
+ * @param {number} x x座標
+ * @param {number} y y座標
+ * @param {number} z z座標
+ * @param {number} color 色の濃淡
+ */
+const createBall = (x, y, z, color) => {
+        p.push()
+        p.translate(x, y, z).fill(p.color(color)).sphere(RADIUS)
+        p.pop()
     }
 
-}
-
-export default () => {
-    const target = useRef(null)
-    useEffect(() => {
-        new p5(sketch, target.current)
-    }, [])
-    return (
-        <div ref={target} />
-    )
 }
 ```
 
