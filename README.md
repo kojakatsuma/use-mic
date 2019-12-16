@@ -166,33 +166,22 @@ Web Audio APIはめちゃくちゃむずいです。わけわからんくらい�
 該当コードはこちらです。
 
 ```js
-    this.context = new AudioContext();           
-    this.input = this.context.createMediaStreamSource(stream)  
-    this.analayzer = this.context.createAnalyser() 
-    this.processor = this.context.createScriptProcessor(1024 * 2, 1, 1) 
-    this.input.connect(this.analayzer)
-    this.analayzer.connect(this.processor)
-    this.processor.connect(this.context.destination)
-    this.spectrum = []
-    this.res = 0
-    this.processor.onaudioprocess = () => {
-        this.spectrum = new Uint8Array(this.analayzer.frequencyBinCount)
-        this.analayzer.getByteFrequencyData(this.spectrum)
-        this.res = this.spectrum.reduce((a, b) => Math.max(a, b))
-    }
+      this.context = new AudioContext();
+      this.input = this.context.createMediaStreamSource(stream)
+      this.analyser = this.context.createAnalyser()
+      this.input.connect(this.analyser)
+      this.analyser.connect(this.context.destination)
 ```
 
 登場人物を整理します。
 
 ```js
-    // AudioContextを作成
-    this.context = new AudioContext(); 
-    // MediaStreamAudioSourceNodeを作成
-    this.input = this.context.createMediaStreamSource(stream)
-    // AnalyserNodeを作成
-    this.analayzer = this.context.createAnalyser() 
-    // ScriptProcessorNodeを作成
-    this.processor = this.context.createScriptProcessor(1024 * 2, 1, 1) 
+      // AudioContextを作成
+      this.context = new AudioContext();
+      // MediaStreamAudioSourceNodeを作成
+      this.input = this.context.createMediaStreamSource(stream)
+      // AnalyserNodeを作成
+      this.analyser = this.context.createAnalyser()
 
 ```
 
@@ -200,41 +189,23 @@ Web Audio APIはめちゃくちゃむずいです。わけわからんくらい�
 
 ざっくりはじめに書いておくと、AudioContextが音声データの管理を担い、MediaStreamAudioSourceNode,AnalyserNode,ScriptProcessorNodeなどのAudioNodeの実装が中間処理を担っています。多分。
 
-ただ、ScriptProcessorNodeについては少し異なります。ScriptProcessorNodeは音声データに直接触れるので、MediaStreamAudioSourceNode、AnalyserNodeが行なっているStreamの変換や音声データの分析ができます。
-
-今回やっていないのは、Streamの変換や音声データの分析処理を私がわからないので、抽象化されたMediaStreamAudioSourceNode,AnalyserNodeを使っています。
-
 | 名前                       | 役割                                                            |
 | -------------------------- | --------------------------------------------------------------- |
 | AudioContext               | 音声データの管理                                                |
 | MediaStreamAudioSourceNode | WebRTCによって取得した入力ストリーム(MediaStream)をWebAudioAPIで扱えるストリーム(AudioBuffer)に変換 |
 | AnalyserNode               | 音声データを分析した情報を取得する(音量はここで取得する)        |
-| ScriptProcessorNode        | オーディオの生成、処理、分析ができる。今回はAnalyserNodeの分析結果を取得して整理しているだけ|
 
 
 なので以下の処理はこれをやっています。
 
 1. マイクで拾った音声データ(MediaStream)Web Auidoに扱えるストリームに変換して、次のAnalyserNodeに渡す
-2. ストリームを分析して、そのまま、次のScriptProcessorNodeに渡す
-3. ストリームをAudioContextに返す。
+2. ストリームを分析して分析情報を持っておく。AudioContextのインスタンスにstreamをそのまま流す
 
-
-ScriptProcessorNodeは`onaudioprocess`関数内でいろいろやっています。
-`audioprocess`は`context.createScriptProcessor`でScriptProcessorNodeを作成した時に、バッファサイズを指定するのですが、このバッファサイズ分のデータが流れてきた時に発火するイベントです。今回はAnalyserNodeの分析結果を整理しています。
 
 ```js
-    this.input.connect(this.analayzer)
-    this.analayzer.connect(this.processor)
-    this.processor.connect(this.context.destination)
-    this.spectrum = []
-    this.res = 0
-    this.processor.onaudioprocess = () => {
-        this.spectrum = new Uint8Array(this.analayzer.frequencyBinCount)
-        this.analayzer.getByteFrequencyData(this.spectrum)
-        this.res = this.spectrum.reduce((a, b) => Math.max(a, b))
-    }
+      this.input.connect(this.analyser)
+      this.analyser.connect(this.context.destination)
 ```
-
 
 ## 最終形態
 
@@ -303,3 +274,11 @@ export default () => {
 }
 
 ```
+
+## 最後に
+
+色々説明を端折ったのですが。気になる方はコードを読んでいただければ幸いです。
+
+https://github.com/kojakatsuma/use-mic
+
+Web Audio APIは激ムズ。これだけでもう1記事かける。
