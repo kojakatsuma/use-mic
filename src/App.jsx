@@ -41,7 +41,6 @@ const sketch = (p) => {
      * @param {number} color 色
      */
     const createBall = (x, y, z, color) => {
-        console.log(color)
         p.push()
         p.translate(x, y, z).fill(p.color(color)).sphere(RADIUS)
         p.pop()
