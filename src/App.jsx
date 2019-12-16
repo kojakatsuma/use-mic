@@ -14,6 +14,7 @@ const sketch = (p) => {
     p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL)
         p.noStroke()
+        p.frameRate(30)
     }
 
     p.draw = () => {
