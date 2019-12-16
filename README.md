@@ -187,7 +187,7 @@ Web Audio APIはめちゃくちゃむずいです。わけわからんくらい�
 
 ### それぞれの役割
 
-ざっくりはじめに書いておくと、AudioContextが音声データの管理を担い、MediaStreamAudioSourceNode,AnalyserNode,ScriptProcessorNodeなどのAudioNodeの実装が中間処理を担っています。多分。
+ざっくりはじめに書いておくと、AudioContextが音声データの管理を担い、MediaStreamAudioSourceNode,AnalyserNodeなどの`AudioNode`の実装が中間処理を担っています。多分。
 
 | 名前                       | 役割                                                            |
 | -------------------------- | --------------------------------------------------------------- |
